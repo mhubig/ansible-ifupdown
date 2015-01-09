@@ -30,6 +30,16 @@
     group: 'root'
     mode: '0755'
 
+- name: Install bridge-utils if needed
+  apt: name=bridge-utils state=present
+  with_items: ifupdown_interfaces
+  when: item.type is defined and item.type == 'bridge'
+
+- name: Install ifenslave if needed
+  apt: name=ifenslave state=present
+  with_items: ifupdown_interfaces
+  when: item.type is defined and item.type == 'bond'
+
 - name: Delete interface configuration if requested
   file:
     path: '/etc/network/interfaces.d/{{ item.weight | default("00") }}_{{ item.filename | default(item.type | default("interface") + "_" + item.iface) }}'
@@ -57,4 +67,3 @@
          (ifupdown_reconfigure is defined and ifupdown_reconfigure == True) and
          (item.changed == True) and
          (item.item.inet is undefined or item.item.inet != 'manual'))
-
