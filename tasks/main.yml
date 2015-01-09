@@ -1,8 +1,10 @@
 ---
 
   # If static configuration is detected, don't manage interfaces automatically
+  # unless it's forced by setting ifupdown_force_overwrite = True!
 - include: check_static.yml
-  when: ifupdown
+  when: (ifupdown and (ifupdown_force_overwrite is undefined or
+         (ifupdown_force_overwrite is defined and ifupdown_force_overwrite == True)))
 
 - include: divert_interfaces.yml
   when: (ifupdown and (ifupdown_static_config is undefined or
@@ -18,4 +20,3 @@
 - include: revert_interfaces.yml
   when: (not ifupdown and (ifupdown_static_config is undefined or
          (ifupdown_static_config is defined and ifupdown_static_config != 'static')))
-

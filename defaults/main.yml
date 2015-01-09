@@ -3,6 +3,9 @@
 # Should Ansible manage /etc/network/interfaces? Set to False to disable
 ifupdown: True
 
+# Don't manage /etc/network/interfaces if a 'static' clause is found!
+ifupdown_force_overwrite: False
+
 # Default external network interface
 ifupdown_external_interface: 'eth0'
 
@@ -62,5 +65,3 @@ ifupdown_interfaces: []
   #  delete: False/True			# remove this interface config file
   #  force: False/True			# force creation of this interface configuration
   #                                     # even if role thinks otherwise
-
-
